@@ -1,4 +1,4 @@
-pyrogram
-tgcrypto
+Pyrogram
+TgCrypto
 urllib3
-unittest
+selenium
