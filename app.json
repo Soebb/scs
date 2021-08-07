@@ -1,6 +1,5 @@
 {
     "name": "YT Channel Scrape Bot",
-    "stack": "container",
     "env": {
         "BOT_TOKEN": {
             "description": "Your bot token",
