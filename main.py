@@ -33,7 +33,7 @@ async def start(bot, message):
 async def link_handler(bot, message):
     if not "channel" in message.text:
         await message.reply("Send me a youtube channel link")
-    else:
+    elif "channel" in message.text:
         url = f"{message.text}"
         channelid = url.split('/')[4]
         chrome_options = Options()
