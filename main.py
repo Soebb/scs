@@ -31,36 +31,36 @@ async def start(bot, message):
 
 @bot.on_message(filters.private & filters.regex(pattern=".*http.*"))
 async def link_handler(bot, message):
-    url = f"{message.text}"
-    channelid = url.split('/')[4]
-    #driver=webdriver.Firefox()
-    chrome_options = Options()
-    chrome_options.add_argument("--user-data-dir=chrome-data")
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
-    driver.get(url)
-    time.sleep(5)
-    dt=datetime.datetime.now().strftime("%Y%m%d%H%M")
-    height = driver.execute_script("return document.documentElement.scrollHeight")
-    lastheight = 0
-
-    while True:
-        if lastheight == height:
-            break
-        lastheight = height
-        driver.execute_script("window.scrollTo(0, " + str(height) + ");")
-        time.sleep(2)
+    if not "channel" in message.text:
+        await message.reply("Send me a youtube channel link")
+    else:
+        url = f"{message.text}"
+        channelid = url.split('/')[4]
+        chrome_options = Options()
+        chrome_options.add_argument("--user-data-dir=chrome-data")
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
+        driver.get(url)
+        time.sleep(5)
+        dt=datetime.datetime.now().strftime("%Y%m%d%H%M")
         height = driver.execute_script("return document.documentElement.scrollHeight")
+        lastheight = 0
 
-    user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
-    for i in user_data:
-        print(i.get_attribute('href'))
-        input = i.get_attribute('href')
-        result = f"{input}"
-        await message.reply(result)
+        while True:
+            if lastheight == height:
+                break
+            lastheight = height
+            driver.execute_script("window.scrollTo(0, " + str(height) + ");")
+            time.sleep(2)
+            height = driver.execute_script("return document.documentElement.scrollHeight")
+
+        user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
+        for i in user_data:
+            result = i.get_attribute('href')
+            await message.reply(f"{result}")
     
 
 
